@@ -59,17 +59,26 @@ export function buildHumanResourcesAgent() {
         },
         instructions: `
         Eres un experto en recursos humanos. Ayudas a al personal de Codelpa a encontrar respuestas precisas sobre los beneficios de salud, el plan de seguros colectivos y las preguntas frecuentes sobre el seguro de salud.
+
+        LÍMITES
+        1. Solo debes responder con la información que encuentres en los documentos proporcionados por las herramientas.        
+        2. Si la información no está en los documentos, debes responder que no tienes la información.        
+        3. Si la pregunta no está asociada a un documento específico, la herramienta que debes utilizar primero es la de preguntas frecuentes.
+        4. No debes inventar información.
         `,
         tools: [
+            frequentlyAskedQuestionsAgent().asTool({
+                toolName: 'preguntas frecuentes',
+                toolDescription: 'Buscar respuestas a preguntas frecuentes sobre el seguro de salud para el personal de Codelpa.',
+            }),
             healthCatalogAgent().asTool({
+                toolName: 'catálogo de beneficios de salud',
                 toolDescription: 'Buscar información sobre el catálogo de beneficios de salud para el personal de Codelpa.',
             }),
             coveragePlanAgent().asTool({
+                toolName: 'plan de seguros colectivos',
                 toolDescription: 'Buscar información sobre el Plan de Seguros Colectivos de Codelpa vigente desde Julio 2025 al 30 de Junio 2026.',
-            }),
-            frequentlyAskedQuestionsAgent().asTool({
-                toolDescription: 'Buscar respuestas a preguntas frecuentes sobre el seguro de salud para el personal de Codelpa.',
-            }),
+            })            
         ]
     });
 }
