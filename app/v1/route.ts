@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
         console.log('CODELPA-AGENT-API - new history', history.length());
         const result = await runner.run(agent, history.toArray());
         console.log('CODELPA-AGENT-API - result', result);
+        console.log('CODELPA-AGENT-API - finalOutput', result.finalOutput);
         return NextResponse.json({ answer: result.finalOutput });
 
     } catch (error) {
