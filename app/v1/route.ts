@@ -4,11 +4,14 @@ import { z } from "zod";
 import { BoundedList } from '@/libs/bounded-list';
 import { buildHumanResourcesAgent } from "@/agents/human-resources";
 import { runner } from "@/libs/runner";
+import { transcribe_audio } from "@/libs/openai";
 
 
 const AgentRequest = z.object({
     message: z.string().min(1),
-    conversation_id: z.string().min(1)
+    type: z.enum(['text', 'audio']),
+    conversation_id: z.string().min(1),
+    audio_base64_uri: z.string().optional().nullable()
 });
 
 const historyTemp = new Map<string, BoundedList<AgentInputItem>>();
@@ -37,7 +40,13 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Payload inválido', details: z.treeifyError(parsed.error) }, { status: 400 });
         }
 
-        const { message, conversation_id } = parsed.data;
+        let { message, conversation_id, type, audio_base64_uri } = parsed.data;
+
+        if (type === 'audio' && audio_base64_uri) {
+            const audio_text = await transcribe_audio(audio_base64_uri);
+            console.log('CODELPA-AGENT-API - audio_text', audio_text);
+            message = audio_text;
+        }
 
         const agent = buildHumanResourcesAgent();
         const history = await getHistory(conversation_id);
