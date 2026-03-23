@@ -8,11 +8,14 @@ import { transcribe_audio } from "@/libs/openai";
 
 
 const AgentRequest = z.object({
-    message: z.string().min(1),
+    message: z.string().optional().default(""),
     type: z.enum(['text', 'audio']),
     conversation_id: z.string().min(1),
-    audio_base64_uri: z.string().optional().nullable()
-});
+    audio_base64_uri: z.string().optional().default("")
+}).refine(
+    (data) => data.type !== 'text' || (data.message !== undefined && data.message.length > 0),
+    { message: 'message es requerido cuando type es text', path: ['message'] }
+);
 
 const historyTemp = new Map<string, BoundedList<AgentInputItem>>();
 
@@ -41,6 +44,10 @@ export async function POST(request: NextRequest) {
         }
 
         let { message, conversation_id, type, audio_base64_uri } = parsed.data;
+        console.log('CODELPA-AGENT-API - message', message);
+        console.log('CODELPA-AGENT-API - conversation_id', conversation_id);
+        console.log('CODELPA-AGENT-API - type', type);
+        console.log('CODELPA-AGENT-API - audio_base64_uri', audio_base64_uri);
 
         if (type === 'audio' && audio_base64_uri) {
             const audio_text = await transcribe_audio(audio_base64_uri);
