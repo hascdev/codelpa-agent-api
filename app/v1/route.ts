@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         console.log('CODELPA-AGENT-API - message', message);
         console.log('CODELPA-AGENT-API - conversation_id', conversation_id);
         console.log('CODELPA-AGENT-API - type', type);
-        console.log('CODELPA-AGENT-API - audio_base64_uri', audio_base64_uri);
+        console.log('CODELPA-AGENT-API - audio_base64_uri', audio_base64_uri.slice(0, 80) + "…");
 
         if (type === 'audio' && audio_base64_uri) {
             const audio_text = await transcribe_audio(audio_base64_uri);
