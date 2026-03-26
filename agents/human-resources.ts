@@ -121,10 +121,7 @@ export function buildHumanResourcesAgent() {
         name: 'Human Resources',
         outputType: HumanResourcesOutput,
         modelSettings: {
-            text: { verbosity: "low" },
-            reasoning: {
-                effort: "high"
-            }
+            temperature: 0.02
         },
         instructions: `Eres el asistente de Recursos Humanos de Codelpa. Tu rol es ayudar a los colaboradores a resolver dudas sobre sus beneficios de salud.
 
