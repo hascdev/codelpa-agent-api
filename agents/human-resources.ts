@@ -1,6 +1,7 @@
-import { Agent } from '@openai/agents';
+import { Agent, tool } from '@openai/agents';
 import { fileSearchTool } from '@openai/agents';
 import { z } from 'zod';
+import { runner } from '@/libs/runner';
 
 const HumanResourcesOutput = z.object({
     answer: z.string(),
@@ -84,6 +85,38 @@ const frequentlyAskedQuestionsAgent = () => {
     });
 };
 
+function buildSearchAllTool() {
+    const faqAgent = frequentlyAskedQuestionsAgent();
+    const catalogAgent = healthCatalogAgent();
+    const coverageAgent = coveragePlanAgent();
+
+    return tool({
+        name: 'buscar_informacion',
+        description: 'Busca información sobre beneficios de salud en todas las fuentes disponibles: preguntas frecuentes, catálogo de beneficios y plan de coberturas. Úsala siempre para responder cualquier consulta del colaborador.',
+        parameters: z.object({
+            query: z.string().describe('La pregunta del colaborador tal como la formuló')
+        }),
+        execute: async ({ query }) => {
+            const results = await Promise.allSettled([
+                runner.run(faqAgent, query),
+                runner.run(catalogAgent, query),
+                runner.run(coverageAgent, query),
+            ]);
+
+            const extract = (r: PromiseSettledResult<any>) =>
+                r.status === 'fulfilled'
+                    ? (r.value.finalOutput ?? 'Sin información encontrada.')
+                    : 'Error al consultar esta fuente.';
+
+            return [
+                `[Preguntas Frecuentes]\n${extract(results[0])}`,
+                `[Catálogo de Beneficios]\n${extract(results[1])}`,
+                `[Plan de Coberturas]\n${extract(results[2])}`,
+            ].join('\n\n');
+        }
+    });
+}
+
 export function buildHumanResourcesAgent() {
     return new Agent<unknown, typeof HumanResourcesOutput>({
         name: 'Human Resources',
@@ -95,22 +128,14 @@ export function buildHumanResourcesAgent() {
         },
         instructions: `Eres el asistente de Recursos Humanos de Codelpa. Tu rol es ayudar a los colaboradores a resolver dudas sobre sus beneficios de salud.
 
-        ## Proceso obligatorio
-
-        Para cada consulta del colaborador SIEMPRE debes ejecutar las tres herramientas antes de responder. No generes una respuesta hasta haber obtenido los resultados de las tres:
-
-        1. **preguntas_frecuentes** → Procedimientos, pasos, documentos, plazos, contactos, convenios, Isapre/Fonasa, GES, Ley de Urgencia, Wellbeing, PACE.
-        2. **catalogo_de_beneficios** → Qué beneficios existen, convenios disponibles, financiamiento, contactos del Área de Calidad de Vida.
-        3. **plan_de_coberturas** → Porcentajes de reembolso, topes en UF, cláusula BMI, capitales del seguro de vida, carencias, requisitos de asegurabilidad.
-
-        Llama a las tres herramientas en paralelo con la misma pregunta del colaborador.
+        Para cada consulta, usa la herramienta "buscar_informacion" con la pregunta del colaborador. Esta herramienta consulta automáticamente tres fuentes de datos y te devuelve los resultados de las tres.
 
         ## Síntesis de la respuesta
 
-        Una vez que tengas los resultados de las tres herramientas:
+        Con los resultados de las tres fuentes:
         1. Identifica exactamente qué está preguntando el colaborador.
-        2. De los resultados obtenidos, descarta toda información que no responda directamente a esa pregunta.
-        3. Solo incluye datos de una fuente adicional si complementan directamente la respuesta (por ejemplo: el procedimiento + el porcentaje de cobertura aplicable).
+        2. Descarta toda información que no responda directamente a esa pregunta.
+        3. Incluye datos de fuentes adicionales solo si complementan directamente la respuesta (por ejemplo: el procedimiento + el porcentaje de cobertura aplicable).
         4. Si una fuente contradice a otra, prioriza la información más específica y detallada.
 
         ## Formato de respuesta
@@ -122,22 +147,9 @@ export function buildHumanResourcesAgent() {
         ## Reglas
         - Responde siempre en español, de forma clara y amigable.
         - Solo puedes leer mensajes de texto y de audio. No tienes la capacidad para leer imágenes ó videos por ahora.
-        - Basa tus respuestas exclusivamente en la información obtenida de las herramientas. No inventes datos.
-        - Si ninguna de las tres herramientas tiene información relevante, responde: "No tengo esa información en los documentos disponibles. Te recomiendo contactar al Área de Calidad de Vida."
-        - No menciones los nombres de las herramientas en tu respuesta al colaborador.`,
-        tools: [
-            frequentlyAskedQuestionsAgent().asTool({
-                toolName: 'preguntas_frecuentes',
-                toolDescription: 'Responde preguntas frecuentes: procedimientos de reembolso, incorporación de cargas, documentos requeridos, uso de convenios (Padre Mariano, FALP, SanaSalud, Ópticas, Dental Cumbre), programa Wellbeing, CODELPA PACE, orientaciones sobre Isapre, Fonasa, GES y Ley de Urgencia.',
-            }),
-            healthCatalogAgent().asTool({
-                toolName: 'catalogo_de_beneficios',
-                toolDescription: 'Consulta el catálogo general de beneficios de Codelpa: beneficios del contrato colectivo (licencia médica, seguro complementario, seguro dental, seguro de vida), beneficios adicionales (vacunación, Wellbeing, PACE) y listado de convenios disponibles con sus costos y condiciones.',
-            }),
-            coveragePlanAgent().asTool({
-                toolName: 'plan_de_coberturas',
-                toolDescription: 'Consulta el díptico del Plan de Seguros Colectivos MetLife (julio 2025 – junio 2026): porcentajes de reembolso, topes por prestación y anuales en UF, cláusula BMI, coberturas hospitalarias, ambulatorias, maternidad, salud mental, dental, vida, salud ampliado, carencias y requisitos de asegurabilidad.',
-            }),
-        ]
+        - Basa tus respuestas exclusivamente en la información obtenida de la herramienta. No inventes datos.
+        - Si ninguna de las tres fuentes tiene información relevante, responde: "No tengo esa información en los documentos disponibles. Te recomiendo contactar al Área de Calidad de Vida."
+        - No menciones los nombres de las fuentes en tu respuesta al colaborador.`,
+        tools: [buildSearchAllTool()]
     });
 }
