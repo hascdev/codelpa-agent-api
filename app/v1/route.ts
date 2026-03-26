@@ -1,11 +1,10 @@
-import { AgentInputItem, RunState, user } from "@openai/agents";
+import { assistant, user } from "@openai/agents";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { BoundedList } from '@/libs/bounded-list';
 import { buildHumanResourcesAgent } from "@/agents/human-resources";
 import { runner } from "@/libs/runner";
 import { transcribe_audio } from "@/libs/openai";
-
+import { getHistory, saveMessage, updateHistory } from "@/libs/supabase";
 
 const AgentRequest = z.object({
     message: z.string().optional().default(""),
@@ -16,21 +15,6 @@ const AgentRequest = z.object({
     (data) => data.type !== 'text' || (data.message !== undefined && data.message.length > 0),
     { message: 'message es requerido cuando type es text', path: ['message'] }
 );
-
-const historyTemp = new Map<string, BoundedList<AgentInputItem>>();
-
-export const MAX_HISTORY_SIZE = 40;
-
-export const getHistory = async (conversation_id: string): Promise<BoundedList<AgentInputItem>> => {
-    if (historyTemp.has(conversation_id)) {
-        return historyTemp.get(conversation_id)!;
-    }
-    return new BoundedList<AgentInputItem>(MAX_HISTORY_SIZE);
-}
-
-export const updateHistory = async (conversation_id: string, history: BoundedList<AgentInputItem>) => {
-    historyTemp.set(conversation_id, history);
-}
 
 export async function POST(request: NextRequest) {
 
@@ -49,28 +33,48 @@ export async function POST(request: NextRequest) {
         console.log('CODELPA-AGENT-API - type', type);
         console.log('CODELPA-AGENT-API - audio_base64_uri', audio_base64_uri.slice(0, 80) + "…");
 
+        // Transcribe audio if needed
         if (type === 'audio' && audio_base64_uri) {
             const audio_text = await transcribe_audio(audio_base64_uri);
             console.log('CODELPA-AGENT-API - audio_text', audio_text);
             message = audio_text;
         }
 
-        const agent = buildHumanResourcesAgent();
-        const history = await getHistory(conversation_id);
+        // Save user message to database without waiting for the response
+        saveMessage(conversation_id, 'user', type, message);
 
+        // Get history from database
+        const history = await getHistory(conversation_id);
         console.log('CODELPA-AGENT-API - current history', history.length());
         history.add(user(message));
         console.log('CODELPA-AGENT-API - new history', history.length());
+
+        // Build agent
+        const agent = buildHumanResourcesAgent();
+
+        // Run agent
         // maxTurns: 3 — Limita el runner loop a 3 iteraciones máximo (turno 1: tool call, turno 2: respuesta estructurada, +1 de margen). 
         // Sin esto, si el modelo no producía el structured output, el loop podía continuar indefinidamente.
         const result = await runner.run(agent, history.toArray(), { maxTurns: 3 });
-        console.log('CODELPA-AGENT-API - finalOutput', result.finalOutput?.answer);
+        if (!result.finalOutput) {
+            return NextResponse.json({ error: 'Sin salida del agente' }, { status: 422 });
+        }
 
-        //const updatedHistory = new BoundedList<AgentInputItem>(MAX_HISTORY_SIZE, result.history);
-        //await updateHistory(conversation_id, updatedHistory);
-        //console.log('CODELPA-AGENT-API - updated history', updatedHistory.length());
+        // Get answer from final output
+        console.log('CODELPA-AGENT-API - finalOutput', result.finalOutput);
+        const answer = result.finalOutput.answer;
+        
+        // Update history in database
+        console.log('CODELPA-AGENT-API - current history', history.length());
+        history.add(assistant(answer));
+        console.log('CODELPA-AGENT-API - new history', history.length());
+        await updateHistory(conversation_id, history);
+        console.log('CODELPA-AGENT-API - updated history', history.length());
 
-        return NextResponse.json({ answer: result.finalOutput?.answer });
+        // Save assistant message to database without waiting for the response
+        saveMessage(conversation_id, 'assistant', "text", answer);
+
+        return NextResponse.json({ answer: answer });
 
     } catch (error) {
         console.error("CODELPA-AGENT-API - error", error);
