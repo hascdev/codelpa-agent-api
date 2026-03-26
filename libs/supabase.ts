@@ -19,7 +19,7 @@ const MAX_HISTORY_SIZE = 10;
 
 export const updateHistory = async (conversation_id: string, history: BoundedList<AgentInputItem>) => {
     const supabase = getSupabaseClient();
-    const { data, error } = await supabase.from('codelpa_agt_history').upsert({ 
+    const { data, error } = await supabase.from('codelpa_agt_histories').upsert({ 
         conversation_id: conversation_id, 
         history: history.toJSON(), // Convertir a array para almacenar en Supabase
         updated_at: new Date().toISOString() }, { onConflict: 'conversation_id' });
@@ -32,7 +32,7 @@ export const updateHistory = async (conversation_id: string, history: BoundedLis
 
 export const getHistory = async (conversation_id: string) : Promise<BoundedList<AgentInputItem>> => {
     const supabase = getSupabaseClient();
-    const { data, error } = await supabase.from('codelpa_agt_history').select('history').eq('conversation_id', conversation_id).maybeSingle();
+    const { data, error } = await supabase.from('codelpa_agt_histories').select('history').eq('conversation_id', conversation_id).maybeSingle();
     if (error) {
         console.error('Error getting codelpa agent history', error);
         return new BoundedList<AgentInputItem>(MAX_HISTORY_SIZE);
