@@ -64,13 +64,13 @@ export async function POST(request: NextRequest) {
         // maxTurns: 3 — Limita el runner loop a 3 iteraciones máximo (turno 1: tool call, turno 2: respuesta estructurada, +1 de margen). 
         // Sin esto, si el modelo no producía el structured output, el loop podía continuar indefinidamente.
         const result = await runner.run(agent, history.toArray(), { maxTurns: 3 });
-        console.log('CODELPA-AGENT-API - finalOutput', result.finalOutput);
+        console.log('CODELPA-AGENT-API - finalOutput', result.finalOutput?.answer);
 
-        const updatedHistory = new BoundedList<AgentInputItem>(MAX_HISTORY_SIZE, result.history);
-        await updateHistory(conversation_id, updatedHistory);
-        console.log('CODELPA-AGENT-API - updated history', updatedHistory.length());
+        //const updatedHistory = new BoundedList<AgentInputItem>(MAX_HISTORY_SIZE, result.history);
+        //await updateHistory(conversation_id, updatedHistory);
+        //console.log('CODELPA-AGENT-API - updated history', updatedHistory.length());
 
-        return NextResponse.json({ answer: result.finalOutput });
+        return NextResponse.json({ answer: result.finalOutput?.answer });
 
     } catch (error) {
         console.error("CODELPA-AGENT-API - error", error);
