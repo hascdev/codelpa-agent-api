@@ -19,7 +19,7 @@ const AgentRequest = z.object({
 
 const historyTemp = new Map<string, BoundedList<AgentInputItem>>();
 
-export const MAX_HISTORY_SIZE = 10;
+export const MAX_HISTORY_SIZE = 40;
 
 export const getHistory = async (conversation_id: string): Promise<BoundedList<AgentInputItem>> => {
     if (historyTemp.has(conversation_id)) {
@@ -62,8 +62,12 @@ export async function POST(request: NextRequest) {
         history.add(user(message));
         console.log('CODELPA-AGENT-API - new history', history.length());
         const result = await runner.run(agent, history.toArray());
-        console.log('CODELPA-AGENT-API - result', result);
         console.log('CODELPA-AGENT-API - finalOutput', result.finalOutput);
+
+        const updatedHistory = new BoundedList<AgentInputItem>(MAX_HISTORY_SIZE, result.history);
+        await updateHistory(conversation_id, updatedHistory);
+        console.log('CODELPA-AGENT-API - updated history', updatedHistory.length());
+
         return NextResponse.json({ answer: result.finalOutput });
 
     } catch (error) {
