@@ -88,7 +88,7 @@ export function buildHumanResourcesAgent() {
     return new Agent<unknown, typeof HumanResourcesOutput>({
         name: 'Human Resources',
         modelSettings: {
-            temperature: 0.02,
+            text: { verbosity: "low" },
             reasoning: {
                 effort: "high"
             }
