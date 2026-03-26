@@ -4,8 +4,7 @@ import { z } from 'zod';
 import { runner } from '@/libs/runner';
 
 const HumanResourcesOutput = z.object({
-    answer: z.string(),
-    document: z.string()
+    answer: z.string()
 });
 
 export type HumanResourcesOutput = z.infer<typeof HumanResourcesOutput>;
@@ -120,6 +119,7 @@ function buildSearchAllTool() {
 export function buildHumanResourcesAgent() {
     return new Agent<unknown, typeof HumanResourcesOutput>({
         name: 'Human Resources',
+        outputType: HumanResourcesOutput,
         modelSettings: {
             text: { verbosity: "low" },
             reasoning: {
@@ -128,7 +128,13 @@ export function buildHumanResourcesAgent() {
         },
         instructions: `Eres el asistente de Recursos Humanos de Codelpa. Tu rol es ayudar a los colaboradores a resolver dudas sobre sus beneficios de salud.
 
-        Para cada consulta, usa la herramienta "buscar_informacion" con la pregunta del colaborador. Esta herramienta consulta automáticamente tres fuentes de datos y te devuelve los resultados de las tres.
+        ## Proceso
+
+        1. Llama a la herramienta "buscar_informacion" UNA SOLA VEZ con la pregunta del colaborador.
+        2. Analiza los resultados de las tres fuentes que te devuelve.
+        3. Genera tu respuesta final en el formato estructurado requerido.
+
+        No llames a la herramienta más de una vez. No generes texto antes de tener los resultados.
 
         ## Síntesis de la respuesta
 
