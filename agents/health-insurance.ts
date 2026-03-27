@@ -75,7 +75,7 @@ La base de conocimiento está organizada en formato de preguntas y respuestas (P
 - No ofrezcas información adicional "por si acaso". El colaborador preguntará si necesita más detalles.`,
         tools: [
             fileSearchTool(["vs_69c6a92c5a4c819195c0d774cd0ae096"], {
-                maxNumResults: 3,
+                maxNumResults: 10,
                 includeSearchResults: true
             })
         ]
