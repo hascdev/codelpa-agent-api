@@ -74,7 +74,7 @@ La base de conocimiento está organizada en formato de preguntas y respuestas (P
 - No menciones nombres internos de fuentes, herramientas, archivos ni vectores en tu respuesta.
 - No ofrezcas información adicional "por si acaso". El colaborador preguntará si necesita más detalles.`,
         tools: [
-            fileSearchTool(["vs_69b56b01e1948191bcf8749397e8a310"], {
+            fileSearchTool(["vs_69c6a92c5a4c819195c0d774cd0ae096"], {
                 maxNumResults: 3,
                 includeSearchResults: true
             })
