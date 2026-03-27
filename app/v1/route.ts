@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Save user message to database without waiting for the response
-        saveMessage(conversation_id, 'user', type, message, message_id);
+        await saveMessage(conversation_id, 'user', type, message, message_id);
 
         // Get history from database
         const history = await getHistory(conversation_id);
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
         console.log('CODELPA-AGENT-API - updated history', history.length());
 
         // Save assistant message to database without waiting for the response
-        saveMessage(conversation_id, 'assistant', "text", answer, message_id);
+        await saveMessage(conversation_id, 'assistant', "text", answer, message_id);
 
         return NextResponse.json({ answer: answer });
 
