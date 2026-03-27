@@ -43,13 +43,14 @@ export const getHistory = async (conversation_id: string) : Promise<BoundedList<
     return new BoundedList<AgentInputItem>(MAX_HISTORY_SIZE);
 }
 
-export const saveMessage = async (conversation_id: string, role: string, type: string, content: string) : Promise<any> => {
+export const saveMessage = async (conversation_id: string, role: string, type: string, content: string, wsp_message_id: string) : Promise<any> => {
     const supabase = getSupabaseClient();
     const { data, error } = await supabase.from('codelpa_agt_messages').insert({
         conversation_id: conversation_id,
         role: role,
         type: type,
-        content: content
+        content: content,
+        wsp_message_id: wsp_message_id
     });
     if (error) {
         console.error('Error saving codelpa agent message', error);

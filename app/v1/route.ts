@@ -7,6 +7,7 @@ import { transcribe_audio } from "@/libs/openai";
 import { getHistory, saveMessage, updateHistory } from "@/libs/supabase";
 
 const AgentRequest = z.object({
+    message_id: z.string().min(1),
     message: z.string().optional().default(""),
     type: z.enum(['text', 'audio']),
     conversation_id: z.string().min(1),
@@ -27,7 +28,8 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Payload inválido', details: z.treeifyError(parsed.error) }, { status: 400 });
         }
 
-        let { message, conversation_id, type, audio_base64_uri } = parsed.data;
+        let { message_id, message, conversation_id, type, audio_base64_uri } = parsed.data;
+        console.log('CODELPA-AGENT-API - message_id', message_id);
         console.log('CODELPA-AGENT-API - message', message);
         console.log('CODELPA-AGENT-API - conversation_id', conversation_id);
         console.log('CODELPA-AGENT-API - type', type);
@@ -41,7 +43,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Save user message to database without waiting for the response
-        saveMessage(conversation_id, 'user', type, message);
+        saveMessage(conversation_id, 'user', type, message, message_id);
 
         // Get history from database
         const history = await getHistory(conversation_id);
@@ -72,7 +74,7 @@ export async function POST(request: NextRequest) {
         console.log('CODELPA-AGENT-API - updated history', history.length());
 
         // Save assistant message to database without waiting for the response
-        saveMessage(conversation_id, 'assistant', "text", answer);
+        saveMessage(conversation_id, 'assistant', "text", answer, message_id);
 
         return NextResponse.json({ answer: answer });
 
