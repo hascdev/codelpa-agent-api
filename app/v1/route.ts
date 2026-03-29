@@ -4,7 +4,7 @@ import { z } from "zod";
 import { runner } from "@/libs/runner";
 import { transcribe_audio } from "@/libs/openai";
 import { getHistory, saveMessage, updateHistory } from "@/libs/supabase";
-import { buildHealthInsuranceAgent } from "@/agents/health-insurance";
+import { buildQualityOfLifeAgent } from "@/agents/quality-of-life";
 
 const AgentRequest = z.object({
     message_id: z.string().min(1),
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
         console.log('CODELPA-AGENT-API - new history', history.length());
 
         // Build agent
-        const agent = buildHealthInsuranceAgent();
+        const agent = buildQualityOfLifeAgent();
 
         // Run agent
         // maxTurns: 3 — Limita el runner loop a 3 iteraciones máximo (turno 1: tool call, turno 2: respuesta estructurada, +1 de margen). 

@@ -1,16 +1,16 @@
 import { Agent, fileSearchTool } from '@openai/agents';
 import { z } from 'zod';
 
-const HealthInsuranceOutput = z.object({
+const QualityOfLifeOutput = z.object({
     answer: z.string()
 });
 
-export type HealthInsuranceOutput = z.infer<typeof HealthInsuranceOutput>;
+export type QualityOfLifeOutput = z.infer<typeof QualityOfLifeOutput>;
 
-export function buildHealthInsuranceAgent() {
-    const healthInsuranceAgent = new Agent<unknown, typeof HealthInsuranceOutput>({
+export function buildQualityOfLifeAgent() {
+    const qualityOfLifeAgent = new Agent<unknown, typeof QualityOfLifeOutput>({
         name: 'Calidad de Vida',
-        outputType: HealthInsuranceOutput,
+        outputType: QualityOfLifeOutput,
         modelSettings: {
             temperature: 0.02,
             text: { verbosity: "medium" }
@@ -70,7 +70,8 @@ La base de conocimiento está organizada en formato de preguntas y respuestas (P
 - Responde siempre en español, de forma clara y amigable.
 - Solo puedes leer mensajes de texto y de audio. No tienes la capacidad para leer imágenes o videos por ahora.
 - Basa tus respuestas exclusivamente en la información obtenida de la herramienta de búsqueda. No inventes datos, montos, porcentajes ni plazos.
-- Si la información solicitada no se encuentra en los resultados de búsqueda, responde: "No tengo esa información. Te recomiendo contactar al Área de Calidad de Vida."
+- Si la información solicitada no se encuentra en los resultados de búsqueda, responde: "No tengo esa información. Te recomiendo contactar al Área de Calidad de Vida.".
+- Simpre indica nombre, correo y teléfono de un colaborador del Área de Calidad de Vida cuando se hace referencia a este.
 - No menciones nombres internos de fuentes, herramientas, archivos ni vectores en tu respuesta.
 - No ofrezcas información adicional "por si acaso". El colaborador preguntará si necesita más detalles.`,
         tools: [
@@ -81,5 +82,5 @@ La base de conocimiento está organizada en formato de preguntas y respuestas (P
         ]
     });
 
-    return healthInsuranceAgent;
+    return qualityOfLifeAgent;
 }
