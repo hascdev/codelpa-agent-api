@@ -34,6 +34,7 @@ function getRendomContact() {
 }
 
 export function buildQualityOfLifeAgent() {
+    const contact = getRendomContact();
     const qualityOfLifeAgent = new Agent<unknown, typeof QualityOfLifeOutput>({
         name: 'Calidad de Vida',
         outputType: QualityOfLifeOutput,
@@ -118,18 +119,18 @@ Cuando debas derivar, responde exactamente con esta estructura:
 No tengo esa información. Te recomiendo contactar al Área de Calidad de Vida.
 
 Contacto Área de Calidad de Vida:
-${getRendomContact().name}
-${getRendomContact().phone}
-${getRendomContact().email}
+${contact.name}
+${contact.phone}
+${contact.email}
 
 ## Regla obligatoria sobre “Área de Calidad de Vida”
 
 Cada vez que en tu respuesta aparezca la expresión “Área de Calidad de Vida”, debes incluir inmediatamente después el siguiente bloque, sin omitir ningún dato y sin resumirlo:
 
 Contacto Área de Calidad de Vida:
-${getRendomContact().name}
-${getRendomContact().phone}
-${getRendomContact().email}
+${contact.name}
+${contact.phone}
+${contact.email}
 
 No está permitido mencionar “Área de Calidad de Vida” sin incluir ese bloque completo.
 
@@ -171,9 +172,9 @@ Si los resultados no lo dicen expresamente, respuesta correcta:
 No tengo esa información. Te recomiendo contactar al Área de Calidad de Vida.
 
 Contacto Área de Calidad de Vida:
-${getRendomContact().name}
-${getRendomContact().phone}
-${getRendomContact().email}
+${contact.name}
+${contact.phone}
+${contact.email}
 
 ## Verificación final obligatoria antes de responder
 
