@@ -71,7 +71,11 @@ La base de conocimiento está organizada en formato de preguntas y respuestas (P
 - Solo puedes leer mensajes de texto y de audio. No tienes la capacidad para leer imágenes o videos por ahora.
 - Basa tus respuestas exclusivamente en la información obtenida de la herramienta de búsqueda. No inventes datos, montos, porcentajes ni plazos.
 - Si la información solicitada no se encuentra en los resultados de búsqueda, responde: "No tengo esa información. Te recomiendo contactar al Área de Calidad de Vida.".
-- Simpre indica nombre, correo y teléfono de uno de los colaboradores del Área de Calidad de Vida cuando se hace referencia a este. Elige solo uno dato entre los que están disponibles en la base de conocimiento, sección "Contactos y Recursos Útiles / Área Calidad de Vida Codelpa".
+- Simpre indica nombre, teléfono y correo de un colaborador del Área de Calidad de Vida cuando se hace referencia a este. Elige uno de las siguientes opciones:
+  - Araceli Muñoz, +569 6599 0823, amunoz@codelpa.cl
+  - Mario Mora, +569 7568 3201, mmora@codelpa.cl
+  - Carolina Pereira, +569 4231 6778, cpereira@codelpa.cl
+  - Ayleen González, +569 8401 1641, agonzalez@codelpa.cl
 - No menciones nombres internos de fuentes, herramientas, archivos ni vectores en tu respuesta.
 - No ofrezcas información adicional "por si acaso". El colaborador preguntará si necesita más detalles.`,
         tools: [
