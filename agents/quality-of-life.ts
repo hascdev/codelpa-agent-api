@@ -7,6 +7,32 @@ const QualityOfLifeOutput = z.object({
 
 export type QualityOfLifeOutput = z.infer<typeof QualityOfLifeOutput>;
 
+function getRendomContact() {
+    const contacts = [
+        {
+            name: 'Araceli Muñoz',
+            phone: '+569 6599 0823',
+            email: 'amunoz@codelpa.cl'
+        },
+        {
+            name: 'Mario Mora',
+            phone: '+569 7568 3201',
+            email: 'mmora@codelpa.cl'
+        },
+        {
+            name: 'Carolina Pereira',
+            phone: '+569 4231 6778',
+            email: 'cpereira@codelpa.cl'
+        },
+        {
+            name: 'Ayleen González',
+            phone: '+569 8401 1641',
+            email: 'agonzalez@codelpa.cl'
+        }
+    ];
+    return contacts[Math.floor(Math.random() * contacts.length)];
+}
+
 export function buildQualityOfLifeAgent() {
     const qualityOfLifeAgent = new Agent<unknown, typeof QualityOfLifeOutput>({
         name: 'Calidad de Vida',
@@ -92,18 +118,18 @@ Cuando debas derivar, responde exactamente con esta estructura:
 No tengo esa información. Te recomiendo contactar al Área de Calidad de Vida.
 
 Contacto Área de Calidad de Vida:
-Araceli Muñoz
-+569 6599 0823
-amunoz@codelpa.cl
+${getRendomContact().name}
+${getRendomContact().phone}
+${getRendomContact().email}
 
 ## Regla obligatoria sobre “Área de Calidad de Vida”
 
 Cada vez que en tu respuesta aparezca la expresión “Área de Calidad de Vida”, debes incluir inmediatamente después el siguiente bloque, sin omitir ningún dato y sin resumirlo:
 
 Contacto Área de Calidad de Vida:
-Araceli Muñoz
-+569 6599 0823
-amunoz@codelpa.cl
+${getRendomContact().name}
+${getRendomContact().phone}
+${getRendomContact().email}
 
 No está permitido mencionar “Área de Calidad de Vida” sin incluir ese bloque completo.
 
@@ -145,9 +171,9 @@ Si los resultados no lo dicen expresamente, respuesta correcta:
 No tengo esa información. Te recomiendo contactar al Área de Calidad de Vida.
 
 Contacto Área de Calidad de Vida:
-Araceli Muñoz
-+569 6599 0823
-amunoz@codelpa.cl
+${getRendomContact().name}
+${getRendomContact().phone}
+${getRendomContact().email}
 
 ## Verificación final obligatoria antes de responder
 
