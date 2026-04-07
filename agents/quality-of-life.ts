@@ -178,8 +178,8 @@ Respuesta correcta:
 El Seguro de Salud, Dental y Ampliado MetLife tiene un costo compartido: el colaborador aporta el 1,6% de su renta imponible y la diferencia la costea la compañía.
 
 Pregunta: ¿Tenemos seguro de vida?
-Respuesta correcta (solo seguro de vida, sin mezclar salud ni dental):
-Responde únicamente según lo que los resultados digan del **seguro de vida**. No incluyas costos ni coberturas del seguro de salud/dental/ampliado salvo que la pregunta los mencione.
+Respuesta correcta (solo seguro de vida):
+Sí, [solo datos del ramo vida según resultados, p. ej. que existe Seguro de Vida MetLife y que lo paga la compañía al 100% si así figura]. **Incorrecto:** explicar que “forma parte del Seguro de Salud, Dental, Vida y Ampliado” o detallar salud/dental. **Incorrecto:** usar el nombre del paquete agrupado como cuerpo principal de la respuesta.
 
 Pregunta: Necesito comprarme lentes, ¿hay reembolso?
 Respuesta correcta (solo reembolso, sin convenios de óptica):
