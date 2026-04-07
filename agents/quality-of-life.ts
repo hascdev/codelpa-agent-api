@@ -7,34 +7,38 @@ const QualityOfLifeOutput = z.object({
 
 export type QualityOfLifeOutput = z.infer<typeof QualityOfLifeOutput>;
 
-function getRendomContact() {
-    const contacts = [
-        {
-            name: 'Araceli Muñoz',
-            phone: '+569 6599 0823',
-            email: 'amunoz@codelpa.cl'
-        },
-        {
-            name: 'Mario Mora',
-            phone: '+569 7568 3201',
-            email: 'mmora@codelpa.cl'
-        },
-        {
-            name: 'Carolina Pereira',
-            phone: '+569 4231 6778',
-            email: 'cpereira@codelpa.cl'
-        },
-        {
-            name: 'Ayleen González',
-            phone: '+569 8401 1641',
-            email: 'agonzalez@codelpa.cl'
-        }
-    ];
-    return contacts[Math.floor(Math.random() * contacts.length)];
+const QUALITY_AREA_CONTACTS = [
+    {
+        name: 'Araceli Muñoz',
+        phone: '+569 6599 0823',
+        email: 'amunoz@codelpa.cl'
+    },
+    {
+        name: 'Mario Mora',
+        phone: '+569 7568 3201',
+        email: 'mmora@codelpa.cl'
+    },
+    {
+        name: 'Carolina Pereira',
+        phone: '+569 4231 6778',
+        email: 'cpereira@codelpa.cl'
+    },
+    {
+        name: 'Ayleen González',
+        phone: '+569 8401 1641',
+        email: 'agonzalez@codelpa.cl'
+    }
+] as const;
+
+/** Bloque de texto con todos los contactos; debe usarse íntegro en derivaciones y al mencionar el área. */
+function formatQualityAreaContactsBlock(): string {
+    return QUALITY_AREA_CONTACTS.map(
+        (c) => `${c.name}\n${c.phone}\n${c.email}`
+    ).join('\n\n');
 }
 
 export function buildQualityOfLifeAgent() {
-    const contact = getRendomContact();
+    const contactsBlock = formatQualityAreaContactsBlock();
     const qualityOfLifeAgent = new Agent<unknown, typeof QualityOfLifeOutput>({
         name: 'Calidad de Vida',
         outputType: QualityOfLifeOutput,
@@ -119,20 +123,16 @@ Cuando debas derivar, responde exactamente con esta estructura:
 No tengo esa información. Te recomiendo contactar al Área de Calidad de Vida.
 
 Contacto Área de Calidad de Vida:
-${contact.name}
-${contact.phone}
-${contact.email}
+${contactsBlock}
 
 ## Regla obligatoria sobre “Área de Calidad de Vida”
 
-Cada vez que en tu respuesta aparezca la expresión “Área de Calidad de Vida”, debes incluir inmediatamente después el siguiente bloque, sin omitir ningún dato y sin resumirlo:
+Cada vez que en tu respuesta aparezca la expresión “Área de Calidad de Vida”, debes incluir inmediatamente después el siguiente bloque con TODOS los contactos del área, sin omitir persona alguna ni ningún dato (nombre, teléfono y correo de cada uno):
 
 Contacto Área de Calidad de Vida:
-${contact.name}
-${contact.phone}
-${contact.email}
+${contactsBlock}
 
-No está permitido mencionar “Área de Calidad de Vida” sin incluir ese bloque completo.
+No está permitido mencionar “Área de Calidad de Vida” sin incluir ese bloque completo con todos los contactos (tantos como figuren en el bloque anterior).
 
 ## Formato de respuesta
 
@@ -172,9 +172,7 @@ Si los resultados no lo dicen expresamente, respuesta correcta:
 No tengo esa información. Te recomiendo contactar al Área de Calidad de Vida.
 
 Contacto Área de Calidad de Vida:
-${contact.name}
-${contact.phone}
-${contact.email}
+${contactsBlock}
 
 ## Verificación final obligatoria antes de responder
 
@@ -183,7 +181,7 @@ Antes de entregar la respuesta final, verifica internamente lo siguiente:
 1. ¿Respondí solo la pregunta literal?
 2. ¿Todo lo que afirmo aparece de forma explícita en los resultados?
 3. ¿Evité inferencias?
-4. Si mencioné “Área de Calidad de Vida”, ¿incluí el bloque completo de contacto?
+4. Si mencioné “Área de Calidad de Vida”, ¿incluí el bloque completo con todos los contactos (nombre, teléfono y correo de cada persona)?
 5. Si no había respaldo suficiente, ¿usé exactamente el texto de derivación?
 
 Si cualquiera de estas respuestas es no, corrige la respuesta antes de entregarla.`,
