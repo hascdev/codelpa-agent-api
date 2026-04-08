@@ -22,7 +22,8 @@ export const updateHistory = async (conversation_id: string, history: BoundedLis
     const { data, error } = await supabase.from('codelpa_agt_histories').upsert({ 
         conversation_id: conversation_id, 
         history: history.toJSON(), // Convertir a array para almacenar en Supabase
-        updated_at: new Date().toISOString() }, { onConflict: 'conversation_id' });
+        updated_at: new Date().toISOString(),
+        conversation_status: 'active' }, { onConflict: 'conversation_id' });
     if (error) {
         console.error('Error updating codelpa agent history', error);
         return null;
