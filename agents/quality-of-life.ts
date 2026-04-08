@@ -203,7 +203,6 @@ Antes de entregar la respuesta final, verifica internamente lo siguiente:
 4. Si mencioné “Área de Calidad de Vida”, ¿incluí el bloque completo con todos los contactos (nombre, teléfono y correo de cada persona)?
 5. Si no había respaldo suficiente, ¿usé exactamente el texto de derivación?
 6. ¿Me limité al objeto literal (p. ej. solo seguro de vida, solo reembolso de lentes) sin mezclar otros seguros ni convenios cuando la pregunta no los pedía?
-7. Si preguntaron solo por seguro de vida, ¿evité el encuadre “Salud, Dental, Vida y Ampliado” y cualquier detalle de salud o dental?
 
 Si cualquiera de estas respuestas es no, corrige la respuesta antes de entregarla.`,
         tools: [
