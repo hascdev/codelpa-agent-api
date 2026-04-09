@@ -189,7 +189,7 @@ Responde solo con lo relativo a **reembolso** de lentes/óptica según tablas o 
 
 Pregunta: ¿Cómo funciona el seguro ampliado?
 Respuesta correcta (solo mecanismo, sin catálogo de coberturas):
-El Seguro Ampliado MetLife se activa cuando consumes el tope anual de 500 UF del Seguro Complementario de Salud. **Incorrecto:** enumerar prestaciones cubiertas, exclusiones, extranjero o topes por prestación; eso corresponde a preguntas como “¿qué cubre?” o “¿cuáles son las exclusiones?”.
+El Seguro Ampliado MetLife se activa cuando consumes el tope anual de 500 UF del Seguro Complementario de Salud. **Incorrecto:** mencionar las coberturas, exclusiones, extranjero o topes por prestación; eso corresponde a preguntas como “¿cuál es la cobertura?” o “¿cuáles son las exclusiones?”.
 
 Pregunta: ¿Se paga adicional si quiero incorporar a mi cónyuge?
 Si los resultados no lo dicen expresamente, respuesta correcta:
