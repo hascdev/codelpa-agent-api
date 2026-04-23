@@ -37,7 +37,7 @@ function formatQualityAreaContactsBlock(): string {
     ).join('\n\n');
 }
 
-export function buildQualityOfLifeAgent() {
+export function buildQualityOfLifeAgent(profile_role: string) {
     const contactsBlock = formatQualityAreaContactsBlock();
     const qualityOfLifeAgent = new Agent<unknown, typeof QualityOfLifeOutput>({
         name: 'Calidad de Vida',
@@ -211,7 +211,7 @@ Antes de entregar la respuesta final, verifica internamente lo siguiente:
 
 Si cualquiera de estas respuestas es no, corrige la respuesta antes de entregarla.`,
         tools: [
-            fileSearchTool(["vs_69c6a92c5a4c819195c0d774cd0ae096"], {
+            fileSearchTool([profile_role === "private" ? "vs_69ea7ea306b081918802c6f138176680" : "vs_69c6a92c5a4c819195c0d774cd0ae096"], {
                 maxNumResults: 10,
                 includeSearchResults: true
             })
