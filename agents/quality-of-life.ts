@@ -198,6 +198,10 @@ Pregunta: ¿Qué deducibles existen? / ¿Hay deducibles?
 Respuesta correcta (solo seguros según resultados, sin convenios):
 Resume solo los deducibles del Seguro Complementario de Salud y del Seguro Dental (u otros ramos MetLife que la pregunta implique según los resultados). **Incorrecto:** añadir que “el convenio FALP no tiene deducibles” u otra frase sobre convenios si el colaborador no preguntó por convenios ni por FALP. Eso solo va si preguntan, por ejemplo: “¿el convenio FALP tiene deducibles?” o “¿qué deducibles hay en los convenios?”.
 
+Pregunta: ¿Cuáles son las coberturas de gastos hospitalarios?
+Respuesta correcta (todas las coberturas hospitalarias existentes):
+Lista todas las coberturas hospitalarias del Seguro Complementario de Salud incluyendo las prestaciones hospitalarias BMI (Bonificación Mínima Isapre).
+
 Pregunta: ¿Se paga adicional si quiero incorporar a mi cónyuge?
 Si los resultados no lo dicen expresamente, respuesta correcta:
 No tengo esa información. Te recomiendo contactar al Área de Calidad de Vida.
