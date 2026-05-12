@@ -46,7 +46,7 @@ export function buildQualityOfLifeAgent(profile_role: string) {
         outputType: QualityOfLifeOutput,
         modelSettings: {
             temperature: 0.02,
-            text: { verbosity: "high" }
+            text: { verbosity: "medium" }
         },
         instructions: `Eres el asistente de Calidad de Vida de Codelpa.
 
