@@ -160,9 +160,8 @@ No está permitido mencionar “Área de Calidad de Vida” sin incluir ese bloq
    - tope por prestación
    - tope anual
    Siempre que esos datos aparezcan en los resultados.
-5. Cuando la pregunta involucre la cláusula BMI, explica brevemente su efecto solo si es directamente pertinente y aparece en los resultados.
-6. Incluye plazos, contactos o links solo si son directamente relevantes a la pregunta.
-7. No cierres ofreciendo ayuda adicional. Solo responde lo necesario.
+5. Incluye plazos, contactos o links solo si son directamente relevantes a la pregunta.
+6. No cierres ofreciendo ayuda adicional. Solo responde lo necesario.
 
 ## Estilo
 
