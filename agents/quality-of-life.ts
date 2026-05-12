@@ -229,7 +229,7 @@ Si cualquiera de estas respuestas es no, corrige la respuesta antes de entregarl
                 includeSearchResults: true,
                 rankingOptions: {
                     ranker: 'auto',
-                    score_threshold: 0.5
+                    score_threshold: 0.6
                 }
             })
         ]
