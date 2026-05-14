@@ -192,7 +192,7 @@ El Seguro Ampliado MetLife se activa cuando consumes el tope anual de 500 UF del
 
 Pregunta: ¿Qué deducibles existen? / ¿Hay deducibles?
 Respuesta correcta (solo seguros según resultados, sin convenios):
-Resume solo los deducibles del Seguro Complementario de Salud y del Seguro Dental (u otros ramos MetLife que la pregunta implique según los resultados). Incorrecto: añadir que “el convenio FALP no tiene deducibles” u otra frase sobre convenios si el colaborador no preguntó por convenios ni por FALP. Eso solo va si preguntan, por ejemplo: “¿el convenio FALP tiene deducibles?” o “¿qué deducibles hay en los convenios?”.
+Indica solo los deducibles del Seguro Complementario de Salud y del Seguro Dental. Incorrecto: añadir que “el convenio FALP no tiene deducibles” u otra frase sobre deducibles de convenios.
 
 Pregunta: ¿Cuáles son las coberturas de gastos hospitalarios?
 Respuesta correcta (todas las coberturas hospitalarias existentes incluyendo las indicadas en la cláusula BMI):
